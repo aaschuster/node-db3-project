@@ -12,24 +12,28 @@ async function find() {
 }
 
 async function findById(scheme_id) {
+  try {
+    const rows = await db("schemes as sc")
+      .select("sc.scheme_name", "st.*")
+      .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
+      .where("sc.scheme_id", scheme_id)
+      .orderBy("st.step_number")
 
-  const rows = await db("schemes as sc")
-    .select("sc.scheme_name", "st.*")
-    .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
-    .where("sc.scheme_id", scheme_id)
-    .orderBy("st.step_number");
+    let res = rows.reduce((acc, row) => {
+      if(row.step_number)
+        acc.steps.push({
+          step_id: row.step_id, 
+          step_number: row.step_number, 
+          instructions: row.instructions
+        })
+      return acc;
+    }, { scheme_id: scheme_id, scheme_name: rows[0].scheme_name, steps: [] } )
 
-  let res = rows.reduce((acc, row) => {
-    if(row.step_number)
-      acc.steps.push({
-        step_id: row.step_id, 
-        step_number: row.step_number, 
-        instructions: row.instructions
-      })
-    return acc;
-  }, { scheme_id: scheme_id, scheme_name: rows[0].scheme_name, steps: [] } )
-
-  return res;
+    return res;
+  }
+    catch (err) {
+      return;
+    }
 }
 
 async function findSteps(scheme_id) {
