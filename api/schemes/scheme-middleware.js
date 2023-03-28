@@ -32,7 +32,7 @@ const validateScheme = (req, res, next) => {
   }
 */
 const validateStep = (req, res, next) => {
-
+  next();
 }
 
 module.exports = {
