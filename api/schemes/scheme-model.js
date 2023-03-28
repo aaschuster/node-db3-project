@@ -4,7 +4,7 @@ async function find() {
   const rows = await db("schemes as sc")
     .select("sc.*")
     .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
-    .count("st.step_id as number_steps")
+    .count("st.step_id as number_of_steps")
     .groupBy("sc.scheme_id")
     .orderBy("sc.scheme_id");
 
@@ -27,7 +27,7 @@ async function findById(scheme_id) {
           instructions: row.instructions
         })
       return acc;
-    }, { scheme_id: scheme_id, scheme_name: rows[0].scheme_name, steps: [] } )
+    }, { scheme_id: Number(scheme_id), scheme_name: rows[0].scheme_name, steps: [] } )
 
     return res;
   }
