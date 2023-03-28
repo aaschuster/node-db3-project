@@ -19,7 +19,17 @@ async function findById(scheme_id) {
     .where("sc.scheme_id", scheme_id)
     .orderBy("st.step_number");
 
-  return rows;
+  let res = rows.reduce((acc, row) => {
+    if(row.step_number)
+      acc.steps.push({
+        step_id: row.step_id, 
+        step_number: row.step_number, 
+        instructions: row.instructions
+      })
+    return acc;
+  }, { scheme_id: scheme_id, scheme_name: rows[0].scheme_name, steps: [] } )
+
+  return res;
   /*
     1B- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`:
 
