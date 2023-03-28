@@ -20,7 +20,14 @@ const checkSchemeId = (req, res, next) => {
   }
 */
 const validateScheme = (req, res, next) => {
-  next();
+  const { scheme_name } = req.body;
+
+  if(!scheme_name || typeof scheme_name !== "string")
+    next( {
+      status: 400,
+      message: "invalid scheme_name"
+    })
+  else next();
 }
 
 /*
