@@ -35,13 +35,11 @@ async function findById(scheme_id) {
 }
 
 async function findSteps(scheme_id) {
-  const rows = await db("steps as st")
+  return db("steps as st")
     .select("step_id", "step_number", "instructions", "scheme_name")
     .join("schemes as sc", "sc.scheme_id", "st.scheme_id")
     .where("st.scheme_id", scheme_id)
     .orderBy("st.step_number");
-
-    return rows;
 }
 
 function add(scheme) {
