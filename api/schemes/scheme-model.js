@@ -1,14 +1,12 @@
 const db = require("../../data/db-config");
 
-async function find() {
-  const rows = await db("schemes as sc")
+function find() {
+  return db("schemes as sc")
     .select("sc.*")
     .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
     .count("st.step_id as number_of_steps")
     .groupBy("sc.scheme_id")
     .orderBy("sc.scheme_id");
-
-    return rows;
 }
 
 async function findById(scheme_id) {
